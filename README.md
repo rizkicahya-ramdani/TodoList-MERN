@@ -33,5 +33,5 @@ A simple and modern Todo List application built using the **MERN Stack**.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/mern-todo-app.git
-cd mern-todo-app
+git clone https://github.com/rizkicahya-ramdani/TodoList-MERN.git
+cd TodoList-MERN.git
