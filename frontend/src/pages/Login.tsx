@@ -28,7 +28,7 @@ const Login: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
             <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
                 <h2 className="text-3xl font-extrabold mb-6 text-center text-violet-700">
-                    Selamat Datang 👋
+                    Selamat Datang!
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            placeholder="you@example.com"
+                            placeholder="Masukkan Username"
                         />
                     </div>
 
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            placeholder="••••••••"
+                            placeholder="Masukkan Password"
                         />
                     </div>
 
