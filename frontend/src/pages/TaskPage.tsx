@@ -23,7 +23,7 @@ const TaskPage = () => {
                 <div className="flex gap-2 mb-4">
                     <input
                         type="text"
-                        className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                         placeholder="Tambah task baru..."
                         value={newTask}
                         onChange={(e) => setNewTask(e.target.value)}
@@ -43,7 +43,7 @@ const TaskPage = () => {
                         tasks.map((task, index) => (
                             <li
                                 key={index}
-                                className="flex items-center justify-between px-4 py-2 bg-gray-50 border rounded-md"
+                                className="flex items-center justify-between px-4 py-2 bg-gray-50 border border-gray-300 rounded-md"
                             >
                                 <span>{task}</span>
                                 <button
