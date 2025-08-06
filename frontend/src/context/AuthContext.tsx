@@ -1,37 +1,60 @@
-import { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useState, useContext, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as api from '../api';
 
 interface User {
-    id: string;
-    username: string;
+    _id: string;
+    name: string;
+    email: string;
+    token: string;
 }
 
 interface AuthContextType {
     user: User | null;
-    token: string | null;
-    login: (user: User, token: string) => void;
+    login: (userData: any) => Promise<void>;
+    register: (userData: any) => Promise<void>;
     logout: () => void;
+    isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
-    const login = (user: User, token: string) => {
-        setUser(user);
-        setToken(token);
-        localStorage.setItem("token", token);
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+        setIsLoading(false);
+    }, []);
+
+    const login = async (userData: any) => {
+        const { data } = await api.login(userData);
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
+        navigate('/');
+    };
+
+    const register = async (userData: any) => {
+        const { data } = await api.register(userData);
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
+        navigate('/');
     };
 
     const logout = () => {
+        localStorage.removeItem('user');
         setUser(null);
-        setToken(null);
-        localStorage.removeItem("token");
+        navigate('/login');
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
@@ -39,6 +62,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if (!context) throw new Error("useAuth must be used within AuthProvider");
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
     return context;
 };

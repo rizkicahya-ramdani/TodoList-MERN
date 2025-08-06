@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    const navigate = useNavigate();
+    // Ambil fungsi login langsung dari context
+    const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMsg("");
+        setIsLoading(true);
 
         try {
-            const res = await api.post("/auth/login", { email, password });
-            const token = res.data.token;
+            await login({ email, password });
 
-            localStorage.setItem("token", token);
-            setErrorMsg("");
-            navigate("/");
         } catch (error: any) {
-            setErrorMsg(error.response?.data?.message || "Login gagal.");
+            setErrorMsg(error.response?.data?.message || "Login gagal. Periksa kembali email dan password Anda.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -44,7 +46,7 @@ const Login: React.FC = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            placeholder="Masukkan Username"
+                            placeholder="Masukkan Email"
                         />
                     </div>
 
@@ -62,21 +64,21 @@ const Login: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200"
+                        disabled={isLoading}
+                        className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 disabled:bg-violet-400"
                     >
-                        Masuk
+                        {isLoading ? "Memproses..." : "Masuk"}
                     </button>
                 </form>
 
                 <p className="text-sm text-center mt-5 text-gray-600">
                     Belum punya akun?{" "}
-                    <a href="/register" className="text-violet-600 hover:underline font-medium">
+                    <Link to="/register" className="text-violet-600 hover:underline font-medium">
                         Daftar di sini
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
-
     );
 };
 

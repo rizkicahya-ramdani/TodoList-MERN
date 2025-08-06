@@ -1,26 +1,35 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Register: React.FC = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMsg("");
+        setSuccessMsg("");
+        setIsLoading(true);
 
         try {
-            await api.post("/auth/register", { email, password });
-            setSuccessMsg("Registrasi berhasil! Silakan login.");
-            setErrorMsg("");
-            setTimeout(() => navigate("/login"), 1500);
+            await register({ name, email, password });
+
+            setSuccessMsg("Registrasi berhasil! Mengarahkan ke halaman utama...");
+
+            setTimeout(() => navigate("/"), 1500);
+
         } catch (error: any) {
-            setErrorMsg(error.response?.data?.message || "Registrasi gagal.");
-            setSuccessMsg("");
+            setErrorMsg(error.response?.data?.message || "Registrasi gagal. Silakan coba lagi.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -38,6 +47,19 @@ const Register: React.FC = () => {
                     {successMsg && (
                         <p className="text-green-600 text-sm text-center">{successMsg}</p>
                     )}
+
+                    {/* Input untuk Nama */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Nama</label>
+                        <input
+                            type="text"
+                            className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            placeholder="Masukkan Nama Lengkap"
+                        />
+                    </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -65,17 +87,18 @@ const Register: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200"
+                        disabled={isLoading}
+                        className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 disabled:bg-violet-400"
                     >
-                        Daftar
+                        {isLoading ? "Mendaftarkan..." : "Daftar"}
                     </button>
                 </form>
 
                 <p className="text-sm text-center mt-5 text-gray-600">
                     Sudah punya akun?{" "}
-                    <a href="/" className="text-violet-600 hover:underline font-medium">
+                    <Link to="/login" className="text-violet-600 hover:underline font-medium">
                         Masuk di sini
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
