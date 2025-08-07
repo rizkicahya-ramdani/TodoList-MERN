@@ -3,8 +3,8 @@ import express, { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import userRoutes from './routes/userRoutes';
-import taskRoutes from './routes/taskRoutes';
+import userRoutes from "./routes/userRoutes";
+import taskRoutes from "./routes/taskRoutes";
 
 const app: Express = express();
 
