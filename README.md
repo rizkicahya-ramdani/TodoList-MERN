@@ -2,7 +2,7 @@
 
 A simple and modern Todo List application built using the **MERN Stack**.
 
-> Currently in development. Focused on frontend with React + TypeScript + Tailwind CSS.
+> Currently in development. Focused on frontend with React + Vite + TypeScript + Tailwind CSS.
 
 ## 🔧 Tech Stack
 
@@ -12,7 +12,7 @@ A simple and modern Todo List application built using the **MERN Stack**.
     - [Tailwind CSS](https://tailwindcss.com/)
     - [Vite](https://vitejs.dev/)
 
-- **Backend** (coming soon):
+- **Backend**:
     - Node.js
     - Express
     - MongoDB
