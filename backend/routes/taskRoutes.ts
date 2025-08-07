@@ -10,6 +10,6 @@ import { protect } from "../middleware/authMiddleware";
 const taskRouter = express.Router();
 
 taskRouter.route('/').get(protect, getTasks).post(protect, createTask);
-taskRouter.route('/:id').put(protect, updateTasks).delete(protect, deleteTask);
+taskRouter.route('/:id').put(protect, updateTask).delete(protect, deleteTask);
 
 export default taskRouter;
