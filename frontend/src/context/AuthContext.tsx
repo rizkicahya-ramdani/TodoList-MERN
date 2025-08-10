@@ -34,17 +34,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = async (userData: any) => {
-        const { data } = await api.login(userData);
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
-        navigate('/');
+        try {
+            const { data } = await api.login(userData);
+            localStorage.setItem('user', JSON.stringify(data));
+            setUser(data);
+            navigate('/');
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
     };
 
     const register = async (userData: any) => {
-        const { data } = await api.register(userData);
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
-        navigate('/');
+        try {
+            const { data } = await api.register(userData);
+            localStorage.setItem('user', JSON.stringify(data));
+            setUser(data);
+            navigate('/');
+        } catch (error) {
+            console.error('Register error:', error);
+            throw error;
+        }
     };
 
     const logout = () => {

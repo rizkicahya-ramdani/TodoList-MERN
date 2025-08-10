@@ -8,20 +8,21 @@ const generateToken = (id: string) => {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         throw new Error('JWT_SECRET is not defined in .env file');
-    } return jwt.sign({ id }, secret, {
+    }
+    return jwt.sign({ id }, secret, {
         expiresIn: '30d',
     });
 };
 
 export const registerUser = async (req: Request, res: Response) => {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-        return res.status(400).json({ message: 'Please add all files' });
+        return res.status(400).json({ message: 'Please add all fields' });
     }
 
     try {
-        const userExist = await User.findOne({ email })
+        const userExist = await User.findOne({ email });
         if (userExist) {
             return res.status(400).json({ message: 'User already exists' });
         }
@@ -65,4 +66,4 @@ export const loginUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
-};
+}; 

@@ -24,4 +24,4 @@ const taskSchema: Schema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model<ITask>('Task', taskSchema);
+export default mongoose.model<ITask>('Task', taskSchema); 

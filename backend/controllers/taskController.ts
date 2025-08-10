@@ -1,19 +1,13 @@
 import { Request, Response } from 'express';
 import Task from '../models/taskModel';
-import { IUser } from '../models/userModel'; // Impor interface IUser
+import { IUser } from '../models/userModel';
 
-// 2. Buat Interface khusus untuk Request yang sudah diautentikasi
-// Ini memberitahu TypeScript bahwa objek 'req' akan memiliki properti 'user'.
 interface AuthenticatedRequest extends Request {
-    user?: IUser; // Properti user bersifat opsional dan memiliki tipe IUser
+    user?: IUser;
 }
 
-// @desc    Get tasks for a user
-// @route   GET /api/tasks
-// 3. Gunakan AuthenticatedRequest sebagai tipe untuk 'req'
 export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
     try {
-        // TypeScript sekarang tahu bahwa req.user ada dan memiliki properti 'id'
         const tasks = await Task.find({ user: req.user!.id });
         res.status(200).json(tasks);
     } catch (error) {
@@ -21,8 +15,6 @@ export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
     }
 };
 
-// @desc    Create a task
-// @route   POST /api/tasks
 export const createTask = async (req: AuthenticatedRequest, res: Response) => {
     if (!req.body.text) {
         return res.status(400).json({ message: 'Please add a text field' });
@@ -30,7 +22,7 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const task = await Task.create({
             text: req.body.text,
-            user: req.user!.id, // Tanda seru (!) memberitahu TS bahwa kita yakin user tidak null
+            user: req.user!.id,
         });
         res.status(201).json(task);
     } catch (error) {
@@ -38,8 +30,6 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
     }
 };
 
-// @desc    Update a task
-// @route   PUT /api/tasks/:id
 export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const task = await Task.findById(req.params.id);
@@ -56,8 +46,6 @@ export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
     }
 };
 
-// @desc    Delete a task
-// @route   DELETE /api/tasks/:id
 export const deleteTask = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const task = await Task.findById(req.params.id);
@@ -72,4 +60,4 @@ export const deleteTask = async (req: AuthenticatedRequest, res: Response) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
-};
+}; 

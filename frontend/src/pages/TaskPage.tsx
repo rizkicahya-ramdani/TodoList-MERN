@@ -46,18 +46,24 @@ const TaskPage: React.FC = () => {
 
     const handleDeleteTask = async (id: string) => {
         try {
+            console.log('Deleting task with ID:', id);
             await api.deleteTask(id);
+            console.log('Task deleted successfully');
             setTasks(tasks.filter((task) => task._id !== id));
         } catch (err) {
+            console.error('Delete error:', err);
             setError("Gagal menghapus tugas.");
         }
     };
 
     const handleToggleComplete = async (id: string, currentStatus: boolean) => {
         try {
+            console.log('Toggling task:', id, 'from', currentStatus, 'to', !currentStatus);
             const { data } = await api.updateTask(id, { completed: !currentStatus });
+            console.log('Task updated successfully:', data);
             setTasks(tasks.map((task) => (task._id === id ? data : task)));
         } catch (err) {
+            console.error('Toggle error:', err);
             setError("Gagal memperbarui tugas.");
         }
     };

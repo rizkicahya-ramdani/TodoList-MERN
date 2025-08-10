@@ -17,10 +17,19 @@ const Login: React.FC = () => {
         setIsLoading(true);
 
         try {
+            console.log('Attempting login with:', { email, password });
             await login({ email, password });
-
         } catch (error: any) {
-            setErrorMsg(error.response?.data?.message || "Login gagal. Periksa kembali email dan password Anda.");
+            console.error('Login error details:', error);
+            if (error.code === 'ERR_NETWORK') {
+                setErrorMsg("Tidak dapat terhubung ke server. Pastikan backend berjalan di port 5000.");
+            } else if (error.response?.status === 401) {
+                setErrorMsg("Email atau password salah.");
+            } else if (error.response?.data?.message) {
+                setErrorMsg(error.response.data.message);
+            } else {
+                setErrorMsg("Login gagal. Periksa kembali email dan password Anda.");
+            }
         } finally {
             setIsLoading(false);
         }
